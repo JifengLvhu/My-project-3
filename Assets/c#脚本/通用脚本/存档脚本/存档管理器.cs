@@ -147,14 +147,14 @@ public class 存档管理器 : MonoBehaviour
                 管理器.初始化界面(当前为存档模式);
             }
         }
-        else if(待应用数据 != null)
+    }
+
+    public void 应用待应用存档数据()
+    {
+        if (待应用数据 != null)
         {
-            玩家 玩家脚本 = FindObjectOfType<玩家>();
-            if (玩家脚本 != null)
-            {
-                玩家脚本.应用存档数据(待应用数据);
-                清空存档数据缓存();
-            }
+            玩家.Instance.应用存档数据(待应用数据);
+            清空存档数据缓存();
         }
     }
 

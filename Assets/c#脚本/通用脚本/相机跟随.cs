@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class 相机跟随 : MonoBehaviour
 {
-    public Transform 玩家位置;
+    public static 相机跟随 Instance { get; private set; }
+
+    private Transform 玩家位置;
     public float 相机跟随速度;
     public Vector3 偏移;
     public float 像素单位 = 100f;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        偏移 = new Vector3(0, 1, -10);
-        相机跟随速度 = 5f;
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        玩家位置 = 玩家.Instance.transform;
+
+        偏移 = new Vector3(0, 1, -10);
+        相机跟随速度 = 50f;
     }
 
     void FixedUpdate() 

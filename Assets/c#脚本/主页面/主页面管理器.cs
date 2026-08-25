@@ -24,7 +24,7 @@ public class 主页面管理器 : MonoBehaviour
 
     public void 开始新游戏()
     {
-        SceneManager.LoadScene("part1");
+        GameManager.Instance.加载场景("Part1");
     }
 
     public void 继续游戏()

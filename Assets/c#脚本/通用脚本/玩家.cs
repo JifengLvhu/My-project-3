@@ -5,8 +5,11 @@ using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+
 public class 玩家 : MonoBehaviour
 {
+    public static 玩家 Instance{ get; private set; }
+
     public enum 水域状态
     {
         空气中,//中心在水位以上
@@ -57,10 +60,23 @@ public class 玩家 : MonoBehaviour
     private float 无敌帧时间 = 3f;
     private float 无敌帧计时器 = 0f;
 
+    //其他
+    public bool 游戏已被暂停 = false;
+
 
 
     void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         刚体 = GetComponent<Rigidbody2D>();
         碰撞体 = transform.Find("碰撞箱").GetComponent<BoxCollider2D>();        
         能力脚本 = GetComponent<玩家能力>();
@@ -77,41 +93,57 @@ public class 玩家 : MonoBehaviour
             应用存档数据(存档管理器.Instance.待应用数据);
             存档管理器.Instance.清空存档数据缓存();
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(按键设置.获取按键("向左移动"))) 横向输入 = -1;
-        else if (Input.GetKey(按键设置.获取按键("向右移动"))) 横向输入 = 1;
-        else 横向输入 = 0;
-
-        if (Input.GetKeyDown(按键设置.获取按键("跳跃"))) 跳跃输入 = true;
-
-        if (能力脚本 != null) 能力脚本.处理能力输入();
-
-        if (Input.GetKeyDown(KeyCode.R))
+        if(!游戏已被暂停)
         {
-            Debug.Log("R - 触发快捷读档");
-            存档管理器.Instance.触发快捷读档();
-        }
+            if (Input.GetKey(按键设置.获取按键("向左移动"))) 横向输入 = -1;
+            else if (Input.GetKey(按键设置.获取按键("向右移动"))) 横向输入 = 1;
+            else 横向输入 = 0;
 
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("ESC - 触发暂停菜单");
-            SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
-        }
+            if (Input.GetKeyDown(按键设置.获取按键("跳跃"))) 跳跃输入 = true;
 
-        更新水域状态();
-        氧气更新();
-        无敌帧更新();
+            if (能力脚本 != null) 能力脚本.处理能力输入();
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("R - 触发快捷读档");
+                存档管理器.Instance.触发快捷读档();
+            }
+
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                Debug.Log("ESC - 触发暂停菜单");
+                SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+            }
+
+            更新水域状态();
+            氧气更新();
+            无敌帧更新();
+        }
     }
 
     void FixedUpdate()
     {
-        重力更新();
-        左右移动();
-        跳跃逻辑();
+        if (!游戏已被暂停)
+        {   
+            重力更新();
+            左右移动();
+            跳跃逻辑();
+        }
+    }
+
+    void OnSceneLoaded(Scene 场景, LoadSceneMode 加载模式)
+    {
+        if(能力脚本 != null)
+        {
+            能力脚本.刷新同伴引用();
+        }
     }
 
 
@@ -288,6 +320,8 @@ public class 玩家 : MonoBehaviour
 
     public 存档管理器.基础存档数据 获取基础存档数据()
     {
+        Debug.Log("获取基础存档数据");
+
         存档管理器.基础存档数据 数据 = new 存档管理器.基础存档数据();
         数据.当前生命值 = 当前生命值;
         数据.当前氧气量 = 当前氧气量;
@@ -298,6 +332,8 @@ public class 玩家 : MonoBehaviour
 
     public 存档管理器.总存档数据 获取最新存档数据(string 章节名, object 章节数据)
     {
+        Debug.Log("获取最新存档数据");
+
         当前生命值 = 最大生命值;
         当前氧气量 = 最大氧气量;
 

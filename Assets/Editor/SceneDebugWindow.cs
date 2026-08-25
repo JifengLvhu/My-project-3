@@ -18,13 +18,12 @@ public class SceneDebugWindow : EditorWindow
     {
         sceneName = EditorGUILayout.TextField("场景名称", sceneName);
 
-        if (GUILayout.Button("同步加载场景 LoadScene"))
+        if (GUILayout.Button("加载场景 LoadSceneAsync"))
         {
-            SceneManager.LoadScene(sceneName);
-        }
-        if (GUILayout.Button("异步加载场景 LoadSceneAsync"))
-        {
-            SceneManager.LoadSceneAsync(sceneName);
+            if (GameManager.Instance != null)
+                GameManager.Instance.加载场景(sceneName);
+            else
+                Debug.LogError("GameManager 不存在");
         }
         if (GUILayout.Button("卸载场景"))
         {

@@ -34,6 +34,7 @@ public class 存档页面管理器 : MonoBehaviour
 
     void Start()
     {
+        GameManager.Instance.暂停游戏();
         关闭按钮.onClick.AddListener(() => 关闭界面());
         Debug.Log("成功绑定关闭按钮");
     }
@@ -83,9 +84,7 @@ public class 存档页面管理器 : MonoBehaviour
                     格子.缩略图.sprite = 默认缩略图;
                 }
 
-
-
-                    格子.按钮组件.onClick.RemoveAllListeners();
+                格子.按钮组件.onClick.RemoveAllListeners();
                 格子.按钮组件.onClick.AddListener(() => {
                     点击存档格子(存档编号, 数据);
                 });
@@ -112,16 +111,11 @@ public class 存档页面管理器 : MonoBehaviour
         }
         else
         {
-            if(数据 != null)
+            if (数据 != null)
             {
-                Debug.Log($"正在读取存档 {存档编号}");
-
                 存档管理器.Instance.待应用数据 = 数据;
-
                 string 目标场景名 = 存档管理器.Instance.获取章节名称(数据.当前章节);
-                Time.timeScale = 1f;
-                UnityEngine.SceneManagement.SceneManager.LoadScene(目标场景名);
-
+                GameManager.Instance.加载场景(目标场景名);
                 关闭界面();
             }
             else
@@ -155,6 +149,11 @@ public class 存档页面管理器 : MonoBehaviour
         }
 
         清理纹理精灵资源();
+
+        if(当前为存档模式)
+        {
+            GameManager.Instance.恢复暂停();
+        }
 
         Debug.Log("关闭存档界面");
         UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("Save");

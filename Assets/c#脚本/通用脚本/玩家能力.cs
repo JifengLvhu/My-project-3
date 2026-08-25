@@ -5,9 +5,8 @@ using UnityEngine;
 public class 玩家能力 : MonoBehaviour
 {
     // 同伴脚本引用
-    public 同伴1 TY脚本;
-    public 同伴1 祭风脚本;
-
+    private 同伴1 TY脚本 = null;
+    private 同伴1 祭风脚本 = null;
     private 同伴1 当前控制的同伴;
 
 
@@ -17,41 +16,48 @@ public class 玩家能力 : MonoBehaviour
     private bool 可以下砸 = false;
     private bool 可以时间回溯 = false;
 
-
-
-
-    void Start()
+    public void 刷新同伴引用()
     {
-        控制TY();
-    }
+        同伴1[] 所有同伴 = FindObjectsOfType<同伴1>();
+        foreach(var 同伴 in 所有同伴)
+        {
+            if(同伴.同伴编号 == 1)
+            {
+                TY脚本 = 同伴;
+            }
+            else if(同伴.同伴编号 == 2)
+            {
+                祭风脚本 = 同伴;
+            }
+        }
 
-    void Update()
-    {
-        
+        当前控制的同伴 = TY脚本;
     }
-
 
     public void 处理能力输入()
     {
-        if(Input.GetKeyDown(按键设置.获取按键("切换控制角色")))
-        {
-            if(当前控制的同伴 == TY脚本)
-            {
-                控制祭风();
-            }
-            else 
-            {
-                控制TY();
-            }
-        }
 
-        if(可以控制同伴 && Input.GetKeyDown(按键设置.获取按键("指定同伴移动")))
+        if (可以控制同伴 && 当前控制的同伴 != null)
         {
-            当前控制的同伴.前往指定位置(transform.position);
-        }
-        if(可以控制同伴 && Input.GetKeyDown(按键设置.获取按键("恢复同伴跟随")))
-        {
-            当前控制的同伴.恢复跟随();
+            if (Input.GetKeyDown(按键设置.获取按键("切换控制角色")))
+            {
+                if (当前控制的同伴 == TY脚本)
+                {
+                    控制祭风();
+                }
+                else
+                {
+                    控制TY();
+                }
+            }
+            if (Input.GetKeyDown(按键设置.获取按键("指定同伴移动")))
+            {
+                当前控制的同伴.前往指定位置(transform.position);
+            }
+            if (Input.GetKeyDown(按键设置.获取按键("恢复同伴跟随")))
+            {
+                当前控制的同伴.恢复跟随();
+            }
         }
     }
 
@@ -61,6 +67,14 @@ public class 玩家能力 : MonoBehaviour
         {
             case "控制同伴移动":
                 可以控制同伴 = true;
+                break;
+
+            case "控制同伴自爆":
+                可以同伴自爆 = true;
+                break;
+
+            case "下砸":
+                可以下砸 = true;
                 break;
 
             default:

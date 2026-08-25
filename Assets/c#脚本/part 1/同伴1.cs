@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class 同伴1 : MonoBehaviour
 {
 
     // 引用与组件
-    public GameObject 玩家;
     Rigidbody2D 物理;
     BoxCollider2D 碰撞体;
     public LayerMask 地面;
     public LayerMask 同伴;
 
+    private 玩家 玩家实例;
     private 工具库 工具库;
 
     // 状态与开关
@@ -54,6 +55,8 @@ public class 同伴1 : MonoBehaviour
 
     void Start()
     {
+        玩家实例 = 玩家.Instance;
+
         角色尺寸 = 碰撞体.bounds.size.x;
         开始跟随玩家阈值 = 同伴编号*2f + 2f;
         停止跟随玩家阈值 = 同伴编号*2f ;
@@ -105,7 +108,7 @@ public class 同伴1 : MonoBehaviour
         switch (当前移动状态)
         {
             case 移动状态类型.跟随玩家:
-                当前目标位置 = 玩家.transform.position;
+                当前目标位置 = 玩家实例.transform.position;
                 当前跟随阈值 = 开始跟随玩家阈值;
                 当前停止阈值 = 停止跟随玩家阈值;
                 break;
@@ -117,7 +120,7 @@ public class 同伴1 : MonoBehaviour
                 break;
 
             default:
-                当前目标位置 = 玩家.transform.position;
+                当前目标位置 = 玩家实例.transform.position;
                 当前跟随阈值 = 开始跟随玩家阈值;
                 当前停止阈值 = 停止跟随玩家阈值;
                 break;
@@ -240,15 +243,15 @@ public class 同伴1 : MonoBehaviour
 
     void 传送判断()
     {
-        if(玩家 == null || 当前移动状态 != 移动状态类型.跟随玩家) return;
+        if(玩家实例 == null || 当前移动状态 != 移动状态类型.跟随玩家) return;
 
-        float 距离 = Vector2.Distance(transform.position, 玩家.transform.position);
+        float 距离 = Vector2.Distance(transform.position, 玩家实例.transform.position);
 
         if(距离 > 传送距离阈值)
         {
             物理.velocity = Vector2.zero;
 
-            Vector2 传送位置 = 玩家.transform.position;
+            Vector2 传送位置 = 玩家实例.transform.position;
             传送位置.y += 2f;
             transform.position = 传送位置;
         }

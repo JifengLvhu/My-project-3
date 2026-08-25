@@ -14,7 +14,6 @@ public class 暂停菜单管理器 : MonoBehaviour
     public Button 设置页面按钮;
     public Button 返回主页按钮;
 
-    private float 当前时间缩放;
 
     void Awake()
     {
@@ -30,26 +29,25 @@ public class 暂停菜单管理器 : MonoBehaviour
 
     void Start()
     {
-        当前时间缩放  = Time.timeScale;
 
         返回游戏按钮.onClick.AddListener(() => 返回游戏());
         读取存档按钮.onClick.AddListener(() => 打开读档界面());
         设置页面按钮.onClick.AddListener(() => 打开设置界面());
         返回主页按钮.onClick.AddListener(() => 返回主页());
 
-        Time.timeScale = 0f;
+        GameManager.Instance.暂停游戏();
     }
 
     private void 返回游戏()
     {
-        Time.timeScale = 当前时间缩放;
+        GameManager.Instance.恢复暂停();
 
         SceneManager.UnloadSceneAsync("Pause");
     }
 
     private void 打开读档界面()
     {
-        SceneManager.LoadScene("Save", LoadSceneMode.Additive);
+        存档管理器.Instance.打开存档场景(false);
     }
 
     private void 打开设置界面()
@@ -59,7 +57,7 @@ public class 暂停菜单管理器 : MonoBehaviour
 
     private void 返回主页()
     {
-        Time.timeScale = 当前时间缩放;
+        GameManager.Instance.恢复暂停();
 
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
