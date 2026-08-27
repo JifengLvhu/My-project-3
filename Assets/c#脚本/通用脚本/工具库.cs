@@ -1,9 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class 工具库 : MonoBehaviour
 {
+    public static GameObject 查找对象(Scene 场景, string 对象名)
+    {
+        Debug.Log("查找对象：" + 对象名);
+        if (!场景.IsValid()) return null;
+
+        foreach(GameObject obj in 场景.GetRootGameObjects())
+        {
+            Transform t = obj.transform.Find(对象名);
+            if(t != null)
+            {
+                Debug.Log("找到对象：" + t.gameObject.name);
+                return t.gameObject;
+            }
+        }
+        return null;
+    }
+
     public static float 向量转角度( Vector2 原点位置, Vector2 目标位置 )
     {
         Vector3 向量 = 目标位置 - 原点位置;

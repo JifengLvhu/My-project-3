@@ -29,7 +29,7 @@ public class 相机跟随 : MonoBehaviour
         玩家位置 = 玩家.Instance.transform;
 
         偏移 = new Vector3(0, 1, -10);
-        相机跟随速度 = 50f;
+        相机跟随速度 = 5f;
     }
 
     void FixedUpdate() 

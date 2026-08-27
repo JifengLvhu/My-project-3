@@ -113,6 +113,7 @@ public class 存档页面管理器 : MonoBehaviour
         {
             if (数据 != null)
             {
+                玩家.Instance.解冻主角();
                 存档管理器.Instance.待应用数据 = 数据;
                 string 目标场景名 = 存档管理器.Instance.获取章节名称(数据.当前章节);
                 GameManager.Instance.加载场景(目标场景名);

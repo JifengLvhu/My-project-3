@@ -33,6 +33,34 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Main",LoadSceneMode.Additive);
     }
 
+    public IEnumerator 传送玩家(string 目标场景名, string 目标出生点名)
+    {
+        正在加载 = true;
+        yield return 加载场景协程(目标场景名);
+
+        while(正在加载)
+        {
+            yield return null;
+        }
+
+        Scene 新场景 = SceneManager.GetSceneByName(目标场景名);
+
+        GameObject 目标出生点 = 工具库.查找对象(新场景,目标出生点名);
+        if (目标出生点 != null)
+        {
+            玩家.Instance.transform.position = 目标出生点.transform.position;
+        }
+    }
+
+
+    public IEnumerator 开始新游戏()
+    {
+        Debug.Log("开始新游戏");
+
+        yield return 存档管理器.Instance.待应用数据 = 存档管理器.Instance.获取游戏初始化数据();
+        加载场景("Part0");
+    }
+
     public void 加载场景(string 目标场景名)
     {
         if(!正在加载)

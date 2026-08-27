@@ -20,11 +20,14 @@ public class 主页面管理器 : MonoBehaviour
         设置按钮.onClick.AddListener(设置);
         退出游戏按钮.onClick.AddListener(退出游戏);
 
+        玩家.Instance.冻结主角();
     }
 
     public void 开始新游戏()
     {
-        GameManager.Instance.加载场景("Part1");
+        GameManager.Instance.StartCoroutine(GameManager.Instance.开始新游戏());
+
+        玩家.Instance.解冻主角();
     }
 
     public void 继续游戏()

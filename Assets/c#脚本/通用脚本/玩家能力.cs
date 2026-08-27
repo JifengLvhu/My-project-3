@@ -11,10 +11,12 @@ public class 玩家能力 : MonoBehaviour
 
 
     // 能力开关
-    private bool 可以控制同伴 = true;
+    private bool 可以控制同伴 = false;
     private bool 可以同伴自爆 = false;
     private bool 可以下砸 = false;
     private bool 可以时间回溯 = false;
+
+    public List<string> 已解锁能力列表 = new List<string>();
 
     public void 刷新同伴引用()
     {
@@ -63,6 +65,11 @@ public class 玩家能力 : MonoBehaviour
 
     public void 解锁能力(string 能力名称)
     {
+        if (!已解锁能力列表.Contains(能力名称))
+        {
+            已解锁能力列表.Add(能力名称);
+        }
+
         switch (能力名称)
         {
             case "控制同伴移动":
@@ -89,5 +96,15 @@ public class 玩家能力 : MonoBehaviour
     public void 控制祭风()
     {
         当前控制的同伴 = 祭风脚本;
+    }
+
+    public List<string> 获取已解锁能力列表()
+    {
+        return new List<string>(已解锁能力列表);
+    }
+
+    public void 应用存档数据(List<string> 存档列表)
+    {
+        已解锁能力列表 = new List<string>(存档列表);
     }
 }

@@ -12,12 +12,13 @@ public class 存档管理器 : MonoBehaviour
 {
     public static 存档管理器 Instance { get; private set; }
 
-    public 总存档数据 待应用数据;//快捷存档
+    public 总存档数据 待应用数据;//加载后应用的数据
     public 总存档数据 待保存数据;//存档点与存档页面管理器传递通道
     private const int 最大存档数量 = 16;
     private 总存档数据[] 存档列表;
     private bool 当前为存档模式 = false;
     public static string 最新截图路径;
+
 
     void Awake()
     {
@@ -34,6 +35,22 @@ public class 存档管理器 : MonoBehaviour
             Destroy(gameObject);
         }
         
+    }
+
+    public 总存档数据 获取游戏初始化数据()
+    {
+        return new 总存档数据
+        {
+            当前章节 = "Part0",
+            基础数据 = new 基础存档数据
+            {
+                当前生命值 = 玩家.Instance.最大生命值,
+                当前氧气量 = 玩家.Instance.最大氧气量,
+                玩家位置 = Vector3.zero
+            },
+
+            Part2数据 = new Part2存档数据()
+        };
     }
     
     public void 保存存档(int 存档位置 ,总存档数据 数据存档)
@@ -86,6 +103,21 @@ public class 存档管理器 : MonoBehaviour
         }
     }
 
+    public IEnumerator 死亡后快捷读档协程()
+    {
+
+        if(读取存档(0) != null)
+        {
+            触发快捷读档();
+        }
+        else
+        {
+            GameManager.Instance.StartCoroutine(GameManager.Instance.开始新游戏());
+        }
+
+        yield return null;
+    }
+
     public void 触发快捷读档()
     {
         总存档数据 数据 = 读取存档(0);
@@ -96,7 +128,7 @@ public class 存档管理器 : MonoBehaviour
         string 目标章节 = 获取章节名称(数据.当前章节);
 
         Debug.Log($"正在加载{目标章节}");
-        SceneManager.LoadSceneAsync(目标章节);
+        GameManager.Instance.加载场景(目标章节);
     }
 
     public void 打开存档场景(bool 是存档模式)
@@ -186,6 +218,19 @@ public class 存档管理器 : MonoBehaviour
         public Vector3 玩家位置;
     }
 
+    [Serializable]
+    public class 玩家能力存档数据
+    {
+        public List<string> 已解锁能力列表 = new List<string>();
+    }
+
+    [Serializable]
+    public class 剧情存档数据
+    {
+        public List<string> 已触发剧情列表 = new List<string>();
+    }
+
+
     //P0无专属数据
 
     //P1无专属数据
@@ -204,12 +249,12 @@ public class 存档管理器 : MonoBehaviour
         public float 当前水位高度;
     }
 
-
-
     [Serializable]
     public class 总存档数据
     {
         public string 当前章节;
+        public 玩家能力存档数据 能力数据;
+        public 剧情存档数据 剧情数据;
         public 基础存档数据 基础数据;
         public Part2存档数据 Part2数据;
 

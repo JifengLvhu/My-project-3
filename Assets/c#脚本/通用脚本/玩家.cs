@@ -21,7 +21,8 @@ public class 玩家 : MonoBehaviour
     // 组件引用
     Rigidbody2D 刚体;
     BoxCollider2D 碰撞体;
-    private 玩家能力 能力脚本;
+    public 玩家能力 能力脚本;
+    public 玩家剧情 剧情脚本;
 
     // 图层设置
     public LayerMask 地面;
@@ -29,7 +30,7 @@ public class 玩家 : MonoBehaviour
     private LayerMask 可跳跃图层;
 
     //生命值
-    private int 最大生命值 = 4;
+    public int 最大生命值 = 4;
     public int 当前生命值 = 4;
     
 
@@ -50,7 +51,7 @@ public class 玩家 : MonoBehaviour
     private float 蹬水跳跃强度 = 4f;
 
     //氧气
-    private float 最大氧气量 = 20f;
+    public float 最大氧气量 = 20f;
     public float 当前氧气量 = 20f;
     private float 氧气消耗速度 = 1f;
     private float 氧气恢复速度 = 10f;
@@ -62,6 +63,8 @@ public class 玩家 : MonoBehaviour
 
     //其他
     public bool 游戏已被暂停 = false;
+    private bool 角色已被冻结 = false;
+    private float 原本的重力缩放;
 
 
 
@@ -80,6 +83,7 @@ public class 玩家 : MonoBehaviour
         刚体 = GetComponent<Rigidbody2D>();
         碰撞体 = transform.Find("碰撞箱").GetComponent<BoxCollider2D>();        
         能力脚本 = GetComponent<玩家能力>();
+        剧情脚本 = GetComponent<玩家剧情>();
     }
     
     void Start()
@@ -96,8 +100,7 @@ public class 玩家 : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if(!游戏已被暂停)
@@ -130,6 +133,13 @@ public class 玩家 : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (角色已被冻结)
+        {
+            刚体.velocity = Vector2.zero;
+            刚体.gravityScale = 0;
+            return;
+        }
+
         if (!游戏已被暂停)
         {   
             重力更新();
@@ -147,19 +157,33 @@ public class 玩家 : MonoBehaviour
     }
 
 
+   public void 冻结主角()
+   {
+        if (角色已被冻结) return;
 
+        角色已被冻结 = true;
+        原本的重力缩放 = 刚体.gravityScale;
+   }
 
-    void 射线长度计算()
+    public void 解冻主角()
+    {
+        if (!角色已被冻结) return;
+
+        角色已被冻结 = false;
+        刚体.gravityScale = 原本的重力缩放;
+    }
+
+    private void 射线长度计算()
     {
         射线长度 = 碰撞体.bounds.extents.y * Mathf.Sqrt(2) - 碰撞体.bounds.extents.y / 7;
     }
 
-    void 左右移动()
+    private void 左右移动()
     {
         刚体.velocity = new Vector2(横向输入 * 移动速度, 刚体.velocity.y);
     }
 
-    void 跳跃逻辑()
+    private void 跳跃逻辑()
     {
         if (跳跃输入)
         {
@@ -167,21 +191,21 @@ public class 玩家 : MonoBehaviour
             {
                 if (射线触地检测())
                 {
-                    刚体.velocity = new Vector2(刚体.velocity.x, 跳跃强度);
                     //Debug.Log("普通触地跳跃");
+                    刚体.velocity = new Vector2(刚体.velocity.x, 跳跃强度);
                 }
             }
             else
             {
                 if (射线触地检测())
                 {
-                    刚体.velocity = new Vector2(刚体.velocity.x, 水中触地跳跃强度);
                     //Debug.Log("水中触地跳跃");
+                    刚体.velocity = new Vector2(刚体.velocity.x, 水中触地跳跃强度);
                 }
                 else
                 {
-                    刚体.velocity = new Vector2(刚体.velocity.x, 蹬水跳跃强度);
                     //Debug.Log("水中腾空跳跃");
+                    刚体.velocity = new Vector2(刚体.velocity.x, 蹬水跳跃强度);
                 }
             }
 
@@ -189,7 +213,7 @@ public class 玩家 : MonoBehaviour
         }
     }
 
-    bool 射线触地检测()
+    private bool 射线触地检测()
     {
         Vector2 射线起点 = (Vector2)transform.position;
         RaycastHit2D 射线检测 = Physics2D.Raycast(射线起点, Vector2.down, 射线长度, 可跳跃图层);
@@ -310,6 +334,7 @@ public class 玩家 : MonoBehaviour
     private void 死亡()
     {
         Debug.Log("玩家死亡");
+        存档管理器.Instance.StartCoroutine(存档管理器.Instance.死亡后快捷读档协程());
     }
 
 
@@ -362,6 +387,9 @@ public class 玩家 : MonoBehaviour
         transform.position = 存档数据.基础数据.玩家位置;
         横向输入 = 0;
         跳跃输入 = false;
+
+        能力脚本.应用存档数据(存档数据.能力数据.已解锁能力列表);
+        剧情脚本.应用存档数据(存档数据.剧情数据.已触发剧情列表);
 
         章节管理器[] 所有章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<章节管理器>().ToArray();
 

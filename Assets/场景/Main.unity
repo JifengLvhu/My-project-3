@@ -1251,19 +1251,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1347869886}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1320020014}
-        m_TargetAssemblyTypeName: "\u4E3B\u9875\u9762\u7BA1\u7406\u5668, Assembly-CSharp"
-        m_MethodName: "\u8BBE\u7F6E"
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1347869886
 MonoBehaviour:
   m_ObjectHideFlags: 0
