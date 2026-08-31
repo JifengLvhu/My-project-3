@@ -15,7 +15,7 @@ public class 加载页面管理器 : MonoBehaviour
 
     private IEnumerator 加载协程(string 目标场景名)
     {
-        Debug.Log("开始加载协程");
+        //Debug.Log("开始加载协程");
         GameManager.Instance.恢复暂停();
 
         过渡黑屏.blocksRaycasts = true;

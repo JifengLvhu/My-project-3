@@ -27,6 +27,7 @@ public class 玩家 : MonoBehaviour
     // 图层设置
     public LayerMask 地面;
     public LayerMask 同伴;
+    public LayerMask 怪;
     private LayerMask 可跳跃图层;
 
     //生命值
@@ -57,11 +58,12 @@ public class 玩家 : MonoBehaviour
     private float 氧气恢复速度 = 10f;
 
     //无敌帧
-    private bool 无敌状态 = false;
+    public bool 无敌状态 = false;
     private float 无敌帧时间 = 3f;
-    private float 无敌帧计时器 = 0f;
+    public float 无敌帧计时器 = 0f;
 
     //其他
+    public bool 正在受击退 = false;
     public bool 游戏已被暂停 = false;
     private bool 角色已被冻结 = false;
     private float 原本的重力缩放;
@@ -88,7 +90,7 @@ public class 玩家 : MonoBehaviour
     
     void Start()
     {
-        可跳跃图层 = 地面 | 同伴;
+        可跳跃图层 = 地面 | 同伴 | 怪;
 
         射线长度计算();
 
@@ -141,10 +143,18 @@ public class 玩家 : MonoBehaviour
         }
 
         if (!游戏已被暂停)
-        {   
+        {
+            if (!正在受击退)
+            {
+                左右移动();
+                跳跃逻辑();
+            }
+            if (正在受击退 && 射线触地检测() && 刚体.velocity.y <= 0f)
+            {
+                Debug.Log("击退结束");
+                正在受击退 = false;
+            }
             重力更新();
-            左右移动();
-            跳跃逻辑();
         }
     }
 
@@ -156,14 +166,17 @@ public class 玩家 : MonoBehaviour
         }
     }
 
+    public void 收到击退(Vector2 击退方向, float 力度)
+    {
+        Debug.Log($"收到击退{击退方向}{力度}");
+        if(!无敌状态)
+        {
+            Debug.Log("击退生效");
+            刚体.velocity = 击退方向 * 力度;
+            正在受击退 = true;
+        }
+    }
 
-   public void 冻结主角()
-   {
-        if (角色已被冻结) return;
-
-        角色已被冻结 = true;
-        原本的重力缩放 = 刚体.gravityScale;
-   }
 
     public void 解冻主角()
     {
@@ -304,6 +317,15 @@ public class 玩家 : MonoBehaviour
 
     //无敌帧
 
+
+    public void 冻结主角()
+    {
+        if (角色已被冻结) return;
+
+        角色已被冻结 = true;
+        原本的重力缩放 = 刚体.gravityScale;
+    }
+
     private void 无敌帧更新()
     {
         if(无敌状态)
@@ -366,6 +388,9 @@ public class 玩家 : MonoBehaviour
 
         存档数据.当前章节 = 章节名;
         存档数据.基础数据 = 获取基础存档数据();
+        存档数据.能力数据 = new 存档管理器.玩家能力存档数据 { 已解锁能力列表 = 能力脚本.获取已解锁能力列表() };
+        存档数据.剧情数据 = new 存档管理器.剧情存档数据 { 已触发剧情列表 = 剧情脚本.获取已触发剧情列表() };
+
 
         if (章节名 == "Part2" && 章节数据 is 存档管理器.Part2存档数据)
         {
@@ -381,6 +406,7 @@ public class 玩家 : MonoBehaviour
         {
             return;
         }
+
 
         当前生命值 = 存档数据.基础数据.当前生命值;
         当前氧气量 = 存档数据.基础数据.当前氧气量;
@@ -404,7 +430,7 @@ public class 玩家 : MonoBehaviour
             }
         }
 
-        Debug.Log("读取存档成功");
+        //Debug.Log("读取存档成功");
 
     }
 

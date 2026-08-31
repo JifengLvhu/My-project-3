@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 
 public class 存档管理器 : MonoBehaviour
@@ -48,8 +47,11 @@ public class 存档管理器 : MonoBehaviour
                 当前氧气量 = 玩家.Instance.最大氧气量,
                 玩家位置 = Vector3.zero
             },
+            能力数据 = new 玩家能力存档数据(),
+            剧情数据 = new 剧情存档数据(),
 
             Part2数据 = new Part2存档数据()
+
         };
     }
     
@@ -125,7 +127,7 @@ public class 存档管理器 : MonoBehaviour
 
         待应用数据 = 数据;
 
-        string 目标章节 = 获取章节名称(数据.当前章节);
+        string 目标章节 = 数据.当前章节;
 
         Debug.Log($"正在加载{目标章节}");
         GameManager.Instance.加载场景(目标章节);
@@ -139,34 +141,11 @@ public class 存档管理器 : MonoBehaviour
         待应用数据 = new 总存档数据();
     }
 
-    public string 获取章节名称(string 章节名)
-    {
-        switch (章节名)
-        {
-            case "Part0":
-                return "Part0";
-                break;
-
-            case "Part1":
-                return "Part1";
-                break;
-
-            case "Part2": 
-                return "Part2";
-                break;
-
-            default:
-                return "Main";
-                Debug.Log("未找到对应章节");
-                break;
-
-        }
-    }
 
     public void 清空存档数据缓存()
     {
         待应用数据 = null;
-        Debug.Log("存档数据缓存已清空");
+        //Debug.Log("存档数据缓存已清空");
     }
 
     private void OnSceneLoaded(Scene 场景, LoadSceneMode 加载模式)

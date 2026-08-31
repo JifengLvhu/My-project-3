@@ -189,7 +189,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8225667537458122739}
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   "\u76EE\u6807\u573A\u666F\u540D": 
-  "\u76EE\u6807\u51FA\u751F\u70B9\u540D": 
+  "\u76EE\u6807\u51FA\u751F\u70B9id": 
 --- !u!50 &3327190285545294036
 Rigidbody2D:
   serializedVersion: 4

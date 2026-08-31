@@ -22,6 +22,13 @@ public class 工具库 : MonoBehaviour
         return null;
     }
 
+    public static float 生成物体随机数(GameObject obj, float min, float max)
+    {
+        var r = new System.Random(obj.GetInstanceID());
+        double t = r.NextDouble();
+        return (float)(min + t * (max - min));
+    }
+
     public static float 向量转角度( Vector2 原点位置, Vector2 目标位置 )
     {
         Vector3 向量 = 目标位置 - 原点位置;

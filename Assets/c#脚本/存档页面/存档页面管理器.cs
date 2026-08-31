@@ -115,7 +115,8 @@ public class 存档页面管理器 : MonoBehaviour
             {
                 玩家.Instance.解冻主角();
                 存档管理器.Instance.待应用数据 = 数据;
-                string 目标场景名 = 存档管理器.Instance.获取章节名称(数据.当前章节);
+                string 目标场景名 = 数据.当前章节;
+                Debug.Log($"正在读取存档 {存档编号}，目标场景: {目标场景名}");
                 GameManager.Instance.加载场景(目标场景名);
                 关闭界面();
             }
@@ -156,7 +157,7 @@ public class 存档页面管理器 : MonoBehaviour
             GameManager.Instance.恢复暂停();
         }
 
-        Debug.Log("关闭存档界面");
+        //Debug.Log("关闭存档界面");
         UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("Save");
     }
 

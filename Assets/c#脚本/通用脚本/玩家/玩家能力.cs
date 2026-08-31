@@ -11,12 +11,24 @@ public class 玩家能力 : MonoBehaviour
 
 
     // 能力开关
-    private bool 可以控制同伴 = false;
-    private bool 可以同伴自爆 = false;
-    private bool 可以下砸 = false;
-    private bool 可以时间回溯 = false;
+    public bool 可以控制同伴 = false;
+    public bool 可以同伴自爆 = false;
+    public bool 可以下砸 = false;
+    public bool 可以时间回溯 = false;
 
     public List<string> 已解锁能力列表 = new List<string>();
+
+
+
+
+    public IEnumerator 复活协程(GameObject 同伴)
+    {
+        Debug.Log("同伴开始复活");
+        同伴.SetActive(false);
+
+        yield return new WaitForSeconds(10f);
+        同伴.SetActive(true);
+    }
 
     public void 刷新同伴引用()
     {
@@ -34,31 +46,59 @@ public class 玩家能力 : MonoBehaviour
         }
 
         当前控制的同伴 = TY脚本;
+        Debug.Log($"已刷新同伴引用，当前同伴脚本为{当前控制的同伴}");
     }
 
     public void 处理能力输入()
     {
-
         if (可以控制同伴 && 当前控制的同伴 != null)
         {
-            if (Input.GetKeyDown(按键设置.获取按键("切换控制角色")))
+            切换控制();
+            if (当前控制的同伴.gameObject.activeInHierarchy)
             {
-                if (当前控制的同伴 == TY脚本)
-                {
-                    控制祭风();
-                }
-                else
-                {
-                    控制TY();
-                }
+                基础控制();
+                自爆控制();
             }
-            if (Input.GetKeyDown(按键设置.获取按键("指定同伴移动")))
+        }
+    }
+
+    private void 切换控制()
+    {
+        if (Input.GetKeyDown(按键设置.获取按键("切换控制同伴")))
+        {
+            if (当前控制的同伴 == TY脚本)
             {
-                当前控制的同伴.前往指定位置(transform.position);
+                控制祭风();
             }
-            if (Input.GetKeyDown(按键设置.获取按键("恢复同伴跟随")))
+            else
             {
-                当前控制的同伴.恢复跟随();
+                控制TY();
+            }
+            Debug.Log($"当前控制同伴为{当前控制的同伴}");
+        }
+    }
+
+    private void 基础控制()
+    {
+        
+        if (Input.GetKeyDown(按键设置.获取按键("指定同伴位置")))
+        {
+            当前控制的同伴.前往指定位置(transform.position);
+        }
+        if (Input.GetKeyDown(按键设置.获取按键("恢复同伴跟随")))
+        {
+            当前控制的同伴.恢复跟随();
+        }
+    }
+
+    private void 自爆控制()
+    {
+        if (Input.GetKeyDown(按键设置.获取按键("同伴自爆")))
+        {
+            if (可以同伴自爆 && 当前控制的同伴 != null)
+            {
+                当前控制的同伴.执行自爆();
+                Debug.Log("同伴自爆");
             }
         }
     }

@@ -31,6 +31,21 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SceneManager.LoadScene("Main",LoadSceneMode.Additive);
+
+        按键设置 按键设置实例 = FindObjectOfType<按键设置>();
+        if (按键设置实例 != null)
+        {
+            Debug.Log("------ 按键设置初始化情况 ------");
+            foreach (var 配置 in 按键设置实例.按键列表)
+            {
+                Debug.Log($"操作: {配置.操作名称} -> 按键: {配置.当前按键值}");
+            }
+            Debug.Log("--------------------------------");
+        }
+        else
+        {
+            Debug.LogWarning("未找到按键设置实例，无法打印按键情况");
+        }
     }
 
     public IEnumerator 传送玩家(string 目标场景名, string 目标出生点名)
@@ -152,7 +167,6 @@ public class GameManager : MonoBehaviour
         游戏已暂停 = false;
         玩家.Instance.游戏已被暂停 = false;
 
-        Debug.Log("暂停恢复");
-
+        //Debug.Log("暂停恢复");
     }
 }

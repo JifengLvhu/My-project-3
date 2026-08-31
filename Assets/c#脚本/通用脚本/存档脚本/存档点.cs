@@ -33,8 +33,7 @@ public class 存档点 : MonoBehaviour
     private void Awake()
     {
         交互键 = 按键设置.获取按键("交互");
-        存档界面键 = 按键设置.获取按键("打开存档界面");
-
+        存档界面键 = 按键设置.获取按键("打开存档页面");
     }
 
     private void OnTriggerEnter2D(Collider2D 其他触发器)
@@ -43,7 +42,7 @@ public class 存档点 : MonoBehaviour
         if (其他触发器.CompareTag("玩家"))
         {
             玩家在范围内 = true;
-            Debug.Log($"进入存档点范围: {存档点ID}");
+            //Debug.Log($"进入存档点范围: {存档点ID}");
         }
     }
 
@@ -52,7 +51,7 @@ public class 存档点 : MonoBehaviour
         if (其他触发器.CompareTag("玩家"))
         {
             玩家在范围内 = false;
-            Debug.Log($"离开存档点范围: {存档点ID}");
+            //Debug.Log($"离开存档点范围: {存档点ID}");
         }
     }
 

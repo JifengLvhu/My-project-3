@@ -309,7 +309,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -448,6 +448,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   "\u5F85\u5E94\u7528\u6570\u636E":
     "\u5F53\u524D\u7AE0\u8282": 
+    "\u80FD\u529B\u6570\u636E":
+      "\u5DF2\u89E3\u9501\u80FD\u529B\u5217\u8868": []
+    "\u5267\u60C5\u6570\u636E":
+      "\u5DF2\u89E6\u53D1\u5267\u60C5\u5217\u8868": []
     "\u57FA\u7840\u6570\u636E":
       "\u5F53\u524D\u751F\u547D\u503C": 0
       "\u5F53\u524D\u6C27\u6C14\u91CF": 0
@@ -458,6 +462,10 @@ MonoBehaviour:
     "\u622A\u56FE\u8DEF\u5F84": 
   "\u5F85\u4FDD\u5B58\u6570\u636E":
     "\u5F53\u524D\u7AE0\u8282": 
+    "\u80FD\u529B\u6570\u636E":
+      "\u5DF2\u89E3\u9501\u80FD\u529B\u5217\u8868": []
+    "\u5267\u60C5\u6570\u636E":
+      "\u5DF2\u89E6\u53D1\u5267\u60C5\u5217\u8868": []
     "\u57FA\u7840\u6570\u636E":
       "\u5F53\u524D\u751F\u547D\u503C": 0
       "\u5F53\u524D\u6C27\u6C14\u91CF": 0
@@ -476,7 +484,7 @@ GameObject:
   m_Component:
   - component: {fileID: 913531071547565250}
   - component: {fileID: 3196376810303212451}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: "\u78B0\u649E\u7BB1"
   m_TagString: "\u73A9\u5BB6"
   m_Icon: {fileID: 0}
@@ -510,7 +518,8 @@ GameObject:
   - component: {fileID: 6270504086941993373}
   - component: {fileID: 7105079056852457728}
   - component: {fileID: 5950944200570997420}
-  m_Layer: 0
+  - component: {fileID: 7105079056852457729}
+  m_Layer: 3
   m_Name: "\u4E3B\u89D2"
   m_TagString: "\u73A9\u5BB6"
   m_Icon: {fileID: 0}
@@ -656,7 +665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5669471058965467260}
   - component: {fileID: 1740142481238084247}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: "\u8D34\u56FE"
   m_TagString: "\u73A9\u5BB6"
   m_Icon: {fileID: 0}
@@ -675,6 +684,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd171c26fc5c7c145bf466f16ba5a650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  "\u53EF\u4EE5\u63A7\u5236\u540C\u4F34": 1
+  "\u53EF\u4EE5\u540C\u4F34\u81EA\u7206": 1
+  "\u53EF\u4EE5\u4E0B\u7838": 0
+  "\u53EF\u4EE5\u65F6\u95F4\u56DE\u6EAF": 0
+  "\u5DF2\u89E3\u9501\u80FD\u529B\u5217\u8868": []
 --- !u!50 &6270504086941993373
 Rigidbody2D:
   serializedVersion: 4
@@ -715,18 +729,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   "\u80FD\u529B\u811A\u672C": {fileID: 0}
+  "\u5267\u60C5\u811A\u672C": {fileID: 0}
   "\u5730\u9762":
     serializedVersion: 2
     m_Bits: 64
   "\u540C\u4F34":
     serializedVersion: 2
     m_Bits: 128
+  "\u602A":
+    serializedVersion: 2
+    m_Bits: 512
   "\u6700\u5927\u751F\u547D\u503C": 4
   "\u5F53\u524D\u751F\u547D\u503C": 4
   "\u5F53\u524D\u6C34\u57DF\u72B6\u6001": 0
   "\u6700\u5927\u6C27\u6C14\u91CF": 20
   "\u5F53\u524D\u6C27\u6C14\u91CF": 20
+  "\u65E0\u654C\u72B6\u6001": 0
+  "\u65E0\u654C\u5E27\u8BA1\u65F6\u5668": 0
+  "\u6B63\u5728\u53D7\u51FB\u9000": 0
   "\u6E38\u620F\u5DF2\u88AB\u6682\u505C": 0
+--- !u!114 &7105079056852457729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238234133933471550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0455c7ca87f63a04b8175231a029bb12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  "\u5DF2\u89E6\u53D1\u5267\u60C5\u5217\u8868": []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

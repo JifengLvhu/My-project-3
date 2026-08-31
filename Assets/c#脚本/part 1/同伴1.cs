@@ -11,27 +11,33 @@ public class 同伴1 : MonoBehaviour
     BoxCollider2D 碰撞体;
     public LayerMask 地面;
     public LayerMask 同伴;
+    public LayerMask 怪;
 
     private 玩家 玩家实例;
     private 工具库 工具库;
 
     // 状态与开关
-    public enum 移动状态类型 { 跟随玩家, 前往目的位置 ,静止}
+    public enum 移动状态类型 { 跟随玩家, 前往目的位置 , 静止, 追逐狱警}
 
     private 移动状态类型 当前移动状态 = 移动状态类型.跟随玩家;
     private bool 是否触地;
     private bool 是否跟随;
 
-    // 移动与阈值参数
+    //编号
     public int 同伴编号;
 
+    //跟随玩家
     private float 开始跟随玩家阈值 = 5f;
     private float 停止跟随玩家阈值 = 3f;
     private float 目标跟随阈值 = 0.2f;
     private float 目标停止阈值 = 0.1f;
     private float 传送距离阈值 = 15f;
+
+    //移动
     private float 移动速度 = 7f;
-    private float 跳跃强度 = 7f;
+    private float 默认速度 = 7f;
+    private float 跳跃强度 = 12;
+    private float 默认跳跃强度;
     private float 横向输入;
 
     // 尺寸与检测
@@ -39,6 +45,10 @@ public class 同伴1 : MonoBehaviour
     private float 射线长度;
     private float 角色尺寸;
 
+    //自爆
+    private 狱警 目标狱警;
+    private float 追逐速度;
+    private float 追逐跳跃强度;
 
 
 
@@ -61,6 +71,15 @@ public class 同伴1 : MonoBehaviour
         开始跟随玩家阈值 = 同伴编号*2f + 2f;
         停止跟随玩家阈值 = 同伴编号*2f ;
         当前移动状态 = 移动状态类型.跟随玩家;
+
+        默认速度 = 7f;
+        移动速度 = 默认速度;
+        追逐速度 = 8f;
+
+        默认跳跃强度 = 12f;
+        跳跃强度 = 默认跳跃强度;
+        追逐跳跃强度 = 15f;
+
     }
 
     void Update()
@@ -111,18 +130,36 @@ public class 同伴1 : MonoBehaviour
                 当前目标位置 = 玩家实例.transform.position;
                 当前跟随阈值 = 开始跟随玩家阈值;
                 当前停止阈值 = 停止跟随玩家阈值;
+
+                移动速度 = 默认速度;
+                跳跃强度 = 默认跳跃强度;
                 break;
 
             case 移动状态类型.前往目的位置:
                 当前目标位置 = 目标位置;
                 当前跟随阈值 = 目标跟随阈值;
                 当前停止阈值 = 目标停止阈值;
+
+                移动速度 = 默认速度;
+                跳跃强度 = 默认跳跃强度;
+                break;
+
+            case 移动状态类型.追逐狱警:
+                当前目标位置 = 目标狱警.transform.position;
+                当前跟随阈值 = 目标跟随阈值;
+                当前停止阈值 = 目标停止阈值;
+
+                移动速度 = 追逐速度;
+                跳跃强度 = 追逐跳跃强度;
                 break;
 
             default:
                 当前目标位置 = 玩家实例.transform.position;
                 当前跟随阈值 = 开始跟随玩家阈值;
                 当前停止阈值 = 停止跟随玩家阈值;
+
+                移动速度 = 默认速度;
+                跳跃强度 = 默认跳跃强度;
                 break;
         }
 
@@ -180,7 +217,7 @@ public class 同伴1 : MonoBehaviour
         Vector2 射线起点 = (Vector2)transform.position + Vector2.right * 横向输入 * (角色尺寸 / 2 + 0.2f);
         Vector2 射线方向 = Vector2.right * 横向输入;
 
-        RaycastHit2D 射线碰撞 =  Physics2D.Raycast(射线起点, 射线方向, 角色尺寸, 地面 | 同伴);
+        RaycastHit2D 射线碰撞 =  Physics2D.Raycast(射线起点, 射线方向, 角色尺寸, 地面 | 同伴 | 怪);
        
         //Debug.DrawRay(射线起点, 射线方向 * 角色尺寸, Color.green, 2f); //查看射线
 
@@ -266,6 +303,54 @@ public class 同伴1 : MonoBehaviour
     public void 恢复跟随()
     {
         当前移动状态 = 移动状态类型.跟随玩家;
+    }
+
+    public void 执行自爆()
+    {
+        狱警[] 所有狱警 = FindObjectsByType<狱警>(FindObjectsSortMode.None);
+        狱警 最近狱警 = null;
+        float 最近距离 = float.MaxValue;
+
+        foreach(var 狱警 in 所有狱警)
+        {
+            if(狱警.已发现玩家)
+            {
+                float 距离 = Vector2.Distance(玩家.Instance.transform.position, 狱警.transform.position);
+                if (距离 < 最近距离)
+                {
+                    最近距离 = 距离;
+                    最近狱警 = 狱警;
+                }
+            }
+        }
+        if(最近狱警 != null)
+        {
+            Debug.Log("执行自爆");
+            当前移动状态 = 移动状态类型.追逐狱警;
+            StartCoroutine(自爆协程(最近狱警));
+        }
+    }
+
+    private IEnumerator 自爆协程(狱警 目标狱警)
+    {
+        追逐狱警(目标狱警);
+        yield return new WaitUntil(() => Vector2.Distance(transform.position, 目标狱警.transform.position) < 1.1f);
+        当前移动状态 = 移动状态类型.跟随玩家;
+        目标狱警.死亡();
+        死亡();
+    }
+
+    public void 追逐狱警(狱警 目标)
+    {
+        当前移动状态 = 移动状态类型.追逐狱警;
+        目标狱警 = 目标;
+    }
+
+    public void 死亡()
+    {
+        玩家能力 能力脚本 = 玩家.Instance.GetComponent<玩家能力>();
+        Debug.Log("同伴死亡");
+        能力脚本.StartCoroutine(能力脚本.复活协程(gameObject));
     }
 }
 
