@@ -104,7 +104,7 @@ public class 基础小怪 : MonoBehaviour
     {
         当前生命值 -= 伤害值;
 
-        if(当前生命值 <= 0)
+        if (当前生命值 <= 0)
         {
             死亡();
         }
@@ -116,31 +116,37 @@ public class 基础小怪 : MonoBehaviour
         //死亡功能
     }
 
-    protected virtual void OnTriggerStay2D(Collider2D 其他触发器)
+    protected virtual void OnTriggerEnter2D(Collider2D 其他触发器)
     {
         if (其他触发器.CompareTag("玩家"))
         {
-
             float y相对距离 = 玩家.Instance.transform.position.y - transform.position.y;
 
-            if(y相对距离 > 距离判定值 - 0.2f)
+            if (y相对距离 > 距离判定值 - 0.2f)
             {
                 收到伤害(1);
                 玩家刚体.velocity = new Vector2(玩家刚体.velocity.x, 玩家反弹力度);
             }
-            else
-            {
+        }
+    }
 
+    protected virtual void OnTriggerStay2D(Collider2D 其他触发器)
+    {
+        if (其他触发器.CompareTag("玩家"))
+        {
+            float y相对距离 = 玩家.Instance.transform.position.y - transform.position.y;
+
+            if (!(y相对距离 > 距离判定值 - 0.2f))
+            {
                 float x相对距离 = 玩家.Instance.transform.position.x - transform.position.x;
                 Vector2 击退方向 = Vector2.zero;
 
-
-                Debug.Log($"x相对距离:{x相对距离} y相对距离:{y相对距离} 距离判定值:{距离判定值}");
-                if(y相对距离 < -距离判定值)
+                //Debug.Log($"x相对距离:{x相对距离} y相对距离:{y相对距离} 距离判定值:{距离判定值}");
+                if (y相对距离 < -距离判定值)
                 {
                     击退方向 = Vector2.down;
                 }
-                else if(x相对距离 > 0)
+                else if (x相对距离 > 0)
                 {
                     击退方向 = new Vector2(1f, 1f).normalized;
                 }

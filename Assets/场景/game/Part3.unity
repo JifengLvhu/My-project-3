@@ -4959,8 +4959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc7229e0642c7d49bb23e0d38bdbece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  "\u76EE\u6807\u573A\u666F\u540D": 
-  "\u76EE\u6807\u51FA\u751F\u70B9id": 
+  "\u76EE\u6807\u573A\u666F\u540D": Part4
+  "\u76EE\u6807\u51FA\u751F\u70B9id": 1
 --- !u!4 &7512813897984531032
 Transform:
   m_ObjectHideFlags: 0

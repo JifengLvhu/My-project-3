@@ -474,6 +474,50 @@ MonoBehaviour:
       "\u6C34\u6C60\u5217\u8868": []
     "\u5B58\u6863\u65F6\u95F4": 
     "\u622A\u56FE\u8DEF\u5F84": 
+--- !u!1 &2023400863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2023400864}
+  - component: {fileID: 2023400865}
+  m_Layer: 0
+  m_Name: "\u5BF9\u8C61\u6C60"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2023400864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023400863}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2023400865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023400863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816c82ae71af417419eb1c5f40000b5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &738010036277944275
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   "\u53EF\u4EE5\u63A7\u5236\u540C\u4F34": 1
   "\u53EF\u4EE5\u540C\u4F34\u81EA\u7206": 1
-  "\u53EF\u4EE5\u4E0B\u7838": 0
+  "\u53EF\u4EE5\u4E0B\u7838": 1
   "\u53EF\u4EE5\u65F6\u95F4\u56DE\u6EAF": 0
   "\u5DF2\u89E3\u9501\u80FD\u529B\u5217\u8868": []
 --- !u!50 &6270504086941993373
@@ -747,6 +791,8 @@ MonoBehaviour:
   "\u65E0\u654C\u72B6\u6001": 0
   "\u65E0\u654C\u5E27\u8BA1\u65F6\u5668": 0
   "\u6B63\u5728\u53D7\u51FB\u9000": 0
+  "\u6B63\u5728\u4E0B\u7838": 0
+  "\u4E0B\u7838\u901F\u5EA6": 0
   "\u6E38\u620F\u5DF2\u88AB\u6682\u505C": 0
 --- !u!114 &7105079056852457729
 MonoBehaviour:
@@ -771,3 +817,4 @@ SceneRoots:
   - {fileID: 569637459}
   - {fileID: 178596955}
   - {fileID: 5621592555610508511}
+  - {fileID: 2023400864}

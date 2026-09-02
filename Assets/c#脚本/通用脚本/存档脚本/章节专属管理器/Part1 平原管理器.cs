@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Part1平原管理器 : MonoBehaviour,章节管理器
+public class Part1平原管理器 : MonoBehaviour, I章节管理器
 {
     public object 获取章节存档数据()
     {

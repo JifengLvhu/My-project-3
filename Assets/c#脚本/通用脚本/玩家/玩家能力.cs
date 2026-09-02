@@ -18,6 +18,8 @@ public class 玩家能力 : MonoBehaviour
 
     public List<string> 已解锁能力列表 = new List<string>();
 
+    //下砸
+    private float 上次下砸输入时间;
 
 
 
@@ -60,6 +62,10 @@ public class 玩家能力 : MonoBehaviour
                 自爆控制();
             }
         }
+        if(可以下砸)
+        {
+            下砸控制();
+        }
     }
 
     private void 切换控制()
@@ -99,6 +105,23 @@ public class 玩家能力 : MonoBehaviour
             {
                 当前控制的同伴.执行自爆();
                 Debug.Log("同伴自爆");
+            }
+        }
+    }
+
+    private void 下砸控制()
+    {   
+        if (Input.GetKeyDown(按键设置.获取按键("下砸")) && !玩家.Instance.射线触地检测())
+        {
+            if (Time.time - 上次下砸输入时间 < 0.5f)
+            {
+                Debug.Log("成功下砸");
+                上次下砸输入时间 = -999f;
+                玩家.Instance.下砸();
+            }
+            else
+            {
+                上次下砸输入时间 = Time.time;
             }
         }
     }

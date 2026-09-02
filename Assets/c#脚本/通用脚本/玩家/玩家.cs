@@ -64,6 +64,10 @@ public class 玩家 : MonoBehaviour
 
     //其他
     public bool 正在受击退 = false;
+    public bool 正在下砸 = false;
+    public float 下砸速度;
+
+    //暂停
     public bool 游戏已被暂停 = false;
     private bool 角色已被冻结 = false;
     private float 原本的重力缩放;
@@ -93,6 +97,7 @@ public class 玩家 : MonoBehaviour
         可跳跃图层 = 地面 | 同伴 | 怪;
 
         射线长度计算();
+        下砸速度 = 10f;
 
         if(存档管理器.Instance != null && 存档管理器.Instance.待应用数据 != null)
         {
@@ -125,6 +130,11 @@ public class 玩家 : MonoBehaviour
             {
                 Debug.Log("ESC - 触发暂停菜单");
                 SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+            }
+
+            if(正在下砸)
+            {
+                if (射线触地检测()) 正在下砸 = false;
             }
 
             更新水域状态();
@@ -177,6 +187,14 @@ public class 玩家 : MonoBehaviour
         }
     }
 
+    public void 下砸()
+    {
+        if (正在下砸) return;
+
+        正在下砸 = true;
+        刚体.velocity = new Vector2(刚体.velocity.x, -下砸速度);
+    }
+
 
     public void 解冻主角()
     {
@@ -226,7 +244,7 @@ public class 玩家 : MonoBehaviour
         }
     }
 
-    private bool 射线触地检测()
+    public bool 射线触地检测()
     {
         Vector2 射线起点 = (Vector2)transform.position;
         RaycastHit2D 射线检测 = Physics2D.Raycast(射线起点, Vector2.down, 射线长度, 可跳跃图层);
@@ -417,11 +435,11 @@ public class 玩家 : MonoBehaviour
         能力脚本.应用存档数据(存档数据.能力数据.已解锁能力列表);
         剧情脚本.应用存档数据(存档数据.剧情数据.已触发剧情列表);
 
-        章节管理器[] 所有章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<章节管理器>().ToArray();
+        I章节管理器[] 所有章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<I章节管理器>().ToArray();
 
         if(所有章节管理器.Length != 0)
         {
-            章节管理器 当前章节管理器 = 所有章节管理器[0];
+            I章节管理器 当前章节管理器 = 所有章节管理器[0];
 
             if(存档数据.Part2数据 != null)
             {

@@ -21,6 +21,7 @@ public class 主页面管理器 : MonoBehaviour
         退出游戏按钮.onClick.AddListener(退出游戏);
 
         玩家.Instance.冻结主角();
+        对象池.Instance.清空所有池();
     }
 
     public void 开始新游戏()

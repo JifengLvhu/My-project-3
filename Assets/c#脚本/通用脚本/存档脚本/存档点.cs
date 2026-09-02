@@ -84,12 +84,12 @@ public class 存档点 : MonoBehaviour
         玩家 玩家脚本 = FindObjectOfType<玩家>();
         if (玩家脚本 != null)
         {
-            章节管理器[] 所有章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<章节管理器>().ToArray();
+            I章节管理器[] 所有章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<I章节管理器>().ToArray();
             object 章节数据 = null;
 
             if (所有章节管理器.Length > 0)
             {
-                章节管理器 当前章节管理器 = 所有章节管理器[0];
+                I章节管理器 当前章节管理器 = 所有章节管理器[0];
                 章节数据 = 当前章节管理器.获取章节存档数据();
             }
             else
@@ -133,7 +133,7 @@ public class 存档点 : MonoBehaviour
         yield return 存档管理器.Instance.捕获屏幕截图();
 
         玩家 玩家脚本 = FindObjectOfType<玩家>();
-        章节管理器 当前章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<章节管理器>().FirstOrDefault();
+        I章节管理器 当前章节管理器 = FindObjectsOfType<MonoBehaviour>().OfType<I章节管理器>().FirstOrDefault();
         object 章节数据 = null;
 
         if (当前章节管理器 != null)
