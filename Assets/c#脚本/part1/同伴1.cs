@@ -224,7 +224,7 @@ public class 同伴1 : MonoBehaviour
         if(射线碰撞.collider != null)
         {
 
-            GameObject 碰撞对象 = 射线碰撞.collider.gameObject;
+            //GameObject 碰撞对象 = 射线碰撞.collider.gameObject;
             //Debug.Log($"检测到障碍物: {碰撞对象.transform.parent}的{碰撞对象.name}"); //排查为何同伴一直跳跃
             if (射线碰撞.collider.gameObject == gameObject)
             {

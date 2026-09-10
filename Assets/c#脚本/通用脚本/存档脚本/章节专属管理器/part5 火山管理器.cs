@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class part5火山管理器 : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public object 获取章节存档数据()
     {
-        
+        Debug.Log("Part0管理器：无章节专属数据，返回null");
+        return null;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void 应用章节存档数据(object 数据)
     {
-        
+        Debug.Log("Part0管理器：收到数据，无需应用");
     }
 }

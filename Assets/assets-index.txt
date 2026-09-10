@@ -1,0 +1,62 @@
+﻿assets-index.txt
+c#脚本\part1\同伴1.cs
+c#脚本\part2\水池.cs
+c#脚本\part2\阀门.cs
+c#脚本\part3\狱警.cs
+c#脚本\part4\史莱姆.cs
+c#脚本\part4\检测器.cs
+c#脚本\主页面\主页面管理器.cs
+c#脚本\加载页面\加载页面管理器.cs
+c#脚本\存档页面\存档位UI.cs
+c#脚本\存档页面\存档页面管理器.cs
+c#脚本\暂停菜单\暂停菜单管理器.cs
+c#脚本\设置页面\基础设置.cs
+c#脚本\设置页面\导航栏.cs
+c#脚本\设置页面\按键设置.cs
+c#脚本\通用脚本\EventSystem.cs
+c#脚本\通用脚本\GameManager.cs
+c#脚本\通用脚本\VolumeManager.cs
+c#脚本\通用脚本\传送门.cs
+c#脚本\通用脚本\基础小怪.cs
+c#脚本\通用脚本\工具库.cs
+c#脚本\通用脚本\相机跟随.cs
+c#脚本\通用脚本\音频通用脚本.cs
+c#脚本\通用脚本\存档脚本\存档点.cs
+c#脚本\通用脚本\存档脚本\存档管理器.cs
+c#脚本\通用脚本\存档脚本\章节管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part Fin 山崖管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\Part0 山崖管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\Part1 平原管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\Part2 下水道管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part3 城堡管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part4  地牢管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part5 火山管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part6 太空管理器.cs
+c#脚本\通用脚本\存档脚本\章节专属管理器\part7 空间站管理器.cs
+c#脚本\通用脚本\对象池\对象池.cs
+c#脚本\通用脚本\对象池\对象池数据.cs
+c#脚本\通用脚本\对象池\自动归还.cs
+c#脚本\通用脚本\玩家\玩家.cs
+c#脚本\通用脚本\玩家\玩家剧情.cs
+c#脚本\通用脚本\玩家\玩家能力.cs
+Editor\SceneDebugWindow.cs
+text\开发日志.txt
+text\新建 文本文档.txt
+TextMesh Pro\Fonts\LiberationSans - OFL.txt
+TextMesh Pro\Resources\LineBreaking Following Characters.txt
+TextMesh Pro\Resources\LineBreaking Leading Characters.txt
+TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader
+TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader
+TextMesh Pro\Shaders\TMP_Bitmap.shader
+TextMesh Pro\Shaders\TMP_SDF Overlay.shader
+TextMesh Pro\Shaders\TMP_SDF SSD.shader
+TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader
+TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader
+TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader
+TextMesh Pro\Shaders\TMP_SDF-Mobile.shader
+TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader
+TextMesh Pro\Shaders\TMP_SDF-Surface.shader
+TextMesh Pro\Shaders\TMP_SDF.shader
+TextMesh Pro\Shaders\TMP_Sprite.shader
+TextMesh Pro\Sprites\EmojiOne Attribution.txt
+TextMesh Pro\Sprites\EmojiOne.json

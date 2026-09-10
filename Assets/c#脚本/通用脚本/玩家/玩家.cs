@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine.SceneManagement;
 
 
@@ -66,13 +65,16 @@ public class 玩家 : MonoBehaviour
     public bool 正在受击退 = false;
     public bool 正在下砸 = false;
     public float 下砸速度;
+    public Vector3 安全位置;
 
     //暂停
     public bool 游戏已被暂停 = false;
     private bool 角色已被冻结 = false;
     private float 原本的重力缩放;
+    private Coroutine 安全位置记录协程引用;
 
-
+    private bool 下砸协程已启用 = false;
+    private bool 安全位置记录协程已启用 = false;
 
     void Awake()
     {
@@ -122,24 +124,27 @@ public class 玩家 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log("R - 触发快捷读档");
                 存档管理器.Instance.触发快捷读档();
             }
 
             if(Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("ESC - 触发暂停菜单");
                 SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
             }
 
             if(正在下砸)
             {
-                if (射线触地检测()) 正在下砸 = false;
+                if (射线触地检测() && !下砸协程已启用)
+                {
+                    下砸协程已启用 = true;
+                    StartCoroutine(结束下砸协程());
+                }
             }
 
             更新水域状态();
             氧气更新();
             无敌帧更新();
+            更新安全位置();
         }
     }
 
@@ -193,6 +198,13 @@ public class 玩家 : MonoBehaviour
 
         正在下砸 = true;
         刚体.velocity = new Vector2(刚体.velocity.x, -下砸速度);
+    }
+    
+    private IEnumerator 结束下砸协程()
+    {
+        yield return new WaitForSeconds(0.25f);
+        正在下砸 = false;
+        下砸协程已启用 = false;
     }
 
 
@@ -248,6 +260,9 @@ public class 玩家 : MonoBehaviour
     {
         Vector2 射线起点 = (Vector2)transform.position;
         RaycastHit2D 射线检测 = Physics2D.Raycast(射线起点, Vector2.down, 射线长度, 可跳跃图层);
+        
+        Debug.DrawLine(射线起点, 射线起点 + Vector2.down * 射线长度, 射线检测.collider != null ? Color.green : Color.red, 0.1f);
+        
         return 射线检测.collider != null;
     }
 
@@ -292,6 +307,34 @@ public class 玩家 : MonoBehaviour
         }
     }
 
+    private void 更新安全位置()
+    {
+        if(Mathf.Abs(刚体.velocity.y) < 0.05f && 射线触地检测())
+        {
+            if(!安全位置记录协程已启用)
+            {
+                安全位置记录协程引用 = StartCoroutine(安全位置记录协程());
+            }
+        }
+        else
+        {
+            if(安全位置记录协程引用 != null)
+            {
+                StopCoroutine(安全位置记录协程引用);
+                安全位置记录协程已启用 = false;
+                安全位置记录协程引用 = null;
+            }
+        }
+    }
+
+    private IEnumerator 安全位置记录协程()
+    {
+        安全位置记录协程已启用 = true;
+        yield return new WaitForSeconds(0.5f);
+        安全位置 = transform.position;
+        安全位置记录协程已启用 = false;
+    }
+
     private void 重力更新()
     {
 
@@ -333,7 +376,7 @@ public class 玩家 : MonoBehaviour
 
 
 
-    //无敌帧
+    //受伤与无敌帧
 
 
     public void 冻结主角()
@@ -369,6 +412,12 @@ public class 玩家 : MonoBehaviour
         }
 
         无敌状态 = true;
+    }
+
+    public void 回到安全位置()
+    {
+        transform.position = 安全位置;
+        刚体.velocity = Vector2.zero;
     }
 
     private void 死亡()

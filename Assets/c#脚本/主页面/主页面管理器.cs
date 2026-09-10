@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -38,7 +38,7 @@ public class 主页面管理器 : MonoBehaviour
 
     public void 设置()
     {
-        SceneManager.LoadScene("settings", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Settings", LoadSceneMode.Additive);
     }
 
     public void 退出游戏()

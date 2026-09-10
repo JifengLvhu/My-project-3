@@ -36,7 +36,6 @@ public class 存档页面管理器 : MonoBehaviour
     {
         GameManager.Instance.暂停游戏();
         关闭按钮.onClick.AddListener(() => 关闭界面());
-        Debug.Log("成功绑定关闭按钮");
     }
 
     public void 初始化界面(bool 模式)

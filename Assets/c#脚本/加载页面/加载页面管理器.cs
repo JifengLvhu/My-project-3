@@ -15,7 +15,7 @@ public class 加载页面管理器 : MonoBehaviour
 
     private IEnumerator 加载协程(string 目标场景名)
     {
-        //Debug.Log("开始加载协程");
+        Debug.Log($"开始加载协程,目标场景名{目标场景名}");
         GameManager.Instance.恢复暂停();
 
         过渡黑屏.blocksRaycasts = true;
@@ -43,7 +43,7 @@ public class 加载页面管理器 : MonoBehaviour
         }
 
 
-        string 场景标识 = (目标场景名 == "Main") ? null : 目标场景名;
+        string 场景标识 = (目标场景名 == "Main") ? null : 目标场景名;//记录新关卡名作为下一次加载的旧关卡名，用于卸载多余场景函数
         yield return GameManager.Instance.加载完毕(场景标识);
 
         存档管理器.Instance.应用待应用存档数据();

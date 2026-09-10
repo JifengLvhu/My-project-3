@@ -32,9 +32,9 @@ public class 水池 : MonoBehaviour
 
             float 原始宽度 = 水池图片Sprite.bounds.size.x;
             原始高度 = 水池图片Sprite.bounds.size.y;
-            float scaleX = 水池宽度 / 原始宽度;
+            float ScaleX = 水池宽度 / 原始宽度;
 
-            水池图片.localScale = new Vector3(scaleX, 水池图片.localScale.y, 1f);
+            水池图片.localScale = new Vector3(ScaleX, 水池图片.localScale.y, 1f);
         }
         if(水池判定框 != null)
         { 
@@ -56,9 +56,9 @@ public class 水池 : MonoBehaviour
 
         if(水池图片 != null)
         {
-            float scaleY = 当前水位 / 原始高度;
+            float ScaleY = 当前水位 / 原始高度;
 
-            水池图片.localScale = new Vector3(水池图片.localScale.x, scaleY, 1f);
+            水池图片.localScale = new Vector3(水池图片.localScale.x, ScaleY, 1f);
             水池图片.localPosition = new Vector3(0f, 当前水位 / 2f, 0f);
         }
 

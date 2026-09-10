@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 
     public void 加载场景(string 目标场景名)
     {
+        Debug.Log($"加载场景: {目标场景名}，正在加载{正在加载}");
         if(!正在加载)
         {
             正在加载 = true;
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator 加载完毕(string 新关卡场景名)
     {
+        Debug.Log($"加载完毕,新关卡场景名:{新关卡场景名}");
         yield return 卸载多余场景(新关卡场景名);
         正在加载 = false;
 
@@ -115,13 +117,21 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator 卸载多余场景(string 新关卡场景名)
     {
-        string[] ui场景列表 = { "Save", "Pause", "Settings", "Main" };
+        string[] ui场景列表 = { "Save", "Pause", "Settings" };
         foreach(string 场景名 in ui场景列表)
         {
             Scene 场景 = SceneManager.GetSceneByName(场景名);
             if(场景.isLoaded)
             {
                 SceneManager.UnloadSceneAsync(场景);
+            }
+        }
+        if(新关卡场景名 != null)
+        {
+            Scene 主页面 = SceneManager.GetSceneByName("Main");
+            if(主页面.isLoaded)
+            {
+                SceneManager.UnloadSceneAsync(主页面);
             }
         }
 

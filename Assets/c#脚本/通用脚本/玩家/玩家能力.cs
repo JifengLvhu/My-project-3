@@ -48,7 +48,7 @@ public class 玩家能力 : MonoBehaviour
         }
 
         当前控制的同伴 = TY脚本;
-        Debug.Log($"已刷新同伴引用，当前同伴脚本为{当前控制的同伴}");
+        //Debug.Log($"已刷新同伴引用，当前同伴脚本为{当前控制的同伴}");
     }
 
     public void 处理能力输入()

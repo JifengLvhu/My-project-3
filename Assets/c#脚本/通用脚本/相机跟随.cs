@@ -37,7 +37,7 @@ public class 相机跟随 : MonoBehaviour
         跟随玩家();
     }
 
-    void Lateupdate()
+    void LateUpdate()
     {
         相机防抖();
     }

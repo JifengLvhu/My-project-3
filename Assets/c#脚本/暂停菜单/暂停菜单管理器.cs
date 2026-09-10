@@ -59,6 +59,6 @@ public class 暂停菜单管理器 : MonoBehaviour
     {
         GameManager.Instance.恢复暂停();
 
-        SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        GameManager.Instance.加载场景("Main");
     }
 }
