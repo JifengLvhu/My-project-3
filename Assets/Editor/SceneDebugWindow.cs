@@ -18,7 +18,7 @@ public class SceneDebugWindow : EditorWindow
     {
         sceneName = EditorGUILayout.TextField("场景名称", sceneName);
 
-        if (GUILayout.Button("加载场景 LoadSceneAsync"))
+        if (GUILayout.Button("加载场景"))
         {
             if (GameManager.Instance != null)
                 GameManager.Instance.加载场景(sceneName);
@@ -55,7 +55,6 @@ public class SceneDebugWindow : EditorWindow
             Debug.Log($"已触发 {count} 个史莱姆执行分裂");
         }
 
-        // ==========新增：归还全部史莱姆到对象池，保留最后1个 ==========
         if (GUILayout.Button("归还史莱姆到对象池(保留最后1个)"))
         {
             if (!EditorApplication.isPlaying)
@@ -71,7 +70,6 @@ public class SceneDebugWindow : EditorWindow
                 return;
             }
 
-            // 跳过最后一个，前面全部归还对象池
             int returnCount = 0;
             for (int i = 0; i < allSlimes.Length - 1; i++)
             {
@@ -83,6 +81,20 @@ public class SceneDebugWindow : EditorWindow
                 }
             }
             Debug.Log($"归还 {returnCount} 个史莱姆，保留1个存活");
+        }
+        
+        EditorGUILayout.Space();
+        
+        if(GUILayout.Button("归还所有对象"))
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                Debug.LogWarning("请进入运行模式再执行该功能！");
+                return;
+            }
+
+            对象池.Instance.归还所有对象();
+            Debug.Log("已归还所有对象到对象池");
         }
     }
 }

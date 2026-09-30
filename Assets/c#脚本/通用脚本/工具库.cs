@@ -29,7 +29,7 @@ public class 工具库 : MonoBehaviour
         return (float)(min + t * (max - min));
     }
 
-    public static float 向量转角度( Vector2 原点位置, Vector2 目标位置 )
+    public static float 向量转角度( Vector3 原点位置, Vector3 目标位置 )
     {
         Vector3 向量 = 目标位置 - 原点位置;
         float 角度 = Mathf.Atan2( 向量.y, 向量.x ) * Mathf.Rad2Deg;
@@ -49,10 +49,10 @@ public class 工具库 : MonoBehaviour
         return 角度;
     }
 
-    public static Vector2 角度转向量( float 角度 )
+    public static Vector3 角度转向量( float 角度 )
     {
         float 弧度 = 角度 * Mathf.Deg2Rad;
-        return new Vector2( Mathf.Cos( 弧度 ), Mathf.Sin( 弧度 ) );
+        return new Vector3( Mathf.Cos( 弧度 ), Mathf.Sin( 弧度 ), 0 );
     }
 
     public static bool 鼠标上滚()

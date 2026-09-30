@@ -175,7 +175,9 @@ public class 史莱姆 : MonoBehaviour, I池对象重置
 
     private IEnumerator 分裂协程()
     {
+
         yield return new WaitUntil(() => 射线触地检测());
+        yield return new WaitUntil(() => 对象池.Instance.已就绪);
 
         自身刚体.velocity = Vector2.zero;
         Vector2 生成位置 = (Vector2)transform.position + Vector2.up * 自身边长;
