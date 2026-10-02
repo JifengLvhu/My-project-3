@@ -5,7 +5,7 @@ public class 激光运行实例
     private readonly 通用激光Pattern Pattern;
 
     private readonly GameObject 显示对象;
-    private readonly 直线激光显示 直线显示;
+    private readonly I激光显示 直线显示;
     
     private Vector2 起始位置;
     private Vector2 初始方向;
@@ -25,7 +25,7 @@ public class 激光运行实例
 
         if (显示对象 != null)
         {
-            直线显示 = 显示对象.GetComponent<直线激光显示>();
+            直线显示 = 显示对象.GetComponent<I激光显示>();
 
             if (直线显示 == null)
             {
@@ -44,7 +44,7 @@ public class 激光运行实例
         剩余时间 -= dt;
         
         Vector2 当前方向 = 旋转方向();
-        直线显示?.更新显示(起始位置, 当前方向, Pattern);
+        直线显示?.更新显示(起始位置, 当前方向, Pattern, Pattern.激光颜色);
 
         检查玩家命中();
         
@@ -140,7 +140,7 @@ public class 激光运行实例
         已完成 = true;
         if (显示对象 != null)
         {
-            Object.Destroy(显示对象);
+            对象池.Instance.归还对象(Pattern.激光名称, 显示对象);
         }
     }
     

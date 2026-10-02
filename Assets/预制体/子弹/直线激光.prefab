@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2906213300930032334}
   - component: {fileID: 8356917123165667137}
   m_Layer: 0
-  m_Name: "\u76F4\u7EBF\u6FC0\u5149\u9884\u5236\u4F53"
+  m_Name: "\u76F4\u7EBF\u6FC0\u5149"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,4 +149,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb58bd30e7ba14745aac01bdaff6c1e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  "\u7EBF\u6761": {fileID: 2906213300930032334}

@@ -22,12 +22,12 @@ public class test : MonoBehaviour
         {
             yield return new WaitForSeconds(发射间隔);
 
-            if (弹幕发射器.Instance == null || 当前Pattern == null)
+            if (行为调度器.Instance == null || 当前Pattern == null)
             {
                 continue;
             }
 
-            弹幕发射器.Instance.发射(
+            行为调度器.Instance.发射(
                 transform.position,
                 Vector2.left,
                 当前Pattern);

@@ -17,51 +17,60 @@ public class 玩家 : MonoBehaviour
     }
 
 
-    // 组件引用
+
+    [Header("组件引用")]
     Rigidbody2D 刚体;
     BoxCollider2D 碰撞体;
     public 玩家能力 能力脚本;
     public 玩家剧情 剧情脚本;
 
-    // 图层设置
+    [Header("图层设置")]
     public LayerMask 地面;
     public LayerMask 同伴;
     public LayerMask 怪;
     private LayerMask 可跳跃图层;
 
-    //生命值
+    [Header("生命值")]
     public int 最大生命值 = 4;
     public int 当前生命值 = 4;
     
 
-    // 尺寸与检测
+    [Header("尺寸与检测")]
     private float 射线长度;
     private bool 是否触地;
 
-    // 移动控制
+    [Header("移动控制")]
     private float 横向输入;
     private float 移动速度 = 7f;
     private bool 跳跃输入;
     private float 跳跃强度 = 12f;
 
-    //水中参数
+    [Header("水中参数")]
     public 水域状态 当前水域状态 = 水域状态.空气中;
     private float 水中重力缩放 = 9f / 25f;
     private float 水中触地跳跃强度 = 9f;
     private float 蹬水跳跃强度 = 4f;
 
-    //氧气
+    [Header("氧气")]
     public float 最大氧气量 = 20f;
     public float 当前氧气量 = 20f;
     private float 氧气消耗速度 = 1f;
     private float 氧气恢复速度 = 10f;
 
-    //无敌帧
+    [Header("无敌帧")]
     public bool 无敌状态 = false;
     private float 无敌帧时间 = 3f;
     public float 无敌帧计时器 = 0f;
+    
+    [Header("推拉参数")]
+    public float 最大速度 = 15f;
+    public float 固定推拉力 = 30f;
+    public float 质量 = 1f;
+    public float 阻尼 = 0.5f;
 
-    //其他
+    private int 推拉计数器 = 0;
+
+    [Header("其他")]
     public bool 正在受击退 = false;
     public bool 正在下砸 = false;
     public float 下砸速度;
@@ -92,6 +101,10 @@ public class 玩家 : MonoBehaviour
         碰撞体 = transform.Find("碰撞箱").GetComponent<BoxCollider2D>();        
         能力脚本 = GetComponent<玩家能力>();
         剧情脚本 = GetComponent<玩家剧情>();
+        
+        刚体.mass = 质量;
+        刚体.drag = 阻尼;
+        刚体.gravityScale = 0;
     }
     
     void Start()
@@ -150,6 +163,7 @@ public class 玩家 : MonoBehaviour
 
     void FixedUpdate()
     {
+        
         if (角色已被冻结)
         {
             刚体.velocity = Vector2.zero;
@@ -159,6 +173,10 @@ public class 玩家 : MonoBehaviour
 
         if (!游戏已被暂停)
         {
+            if (推拉计数器 > 0)
+            {
+                return;
+            }
             if (!正在受击退)
             {
                 左右移动();
@@ -183,12 +201,79 @@ public class 玩家 : MonoBehaviour
 
     public void 收到击退(Vector2 击退方向, float 力度)
     {
-        Debug.Log($"收到击退{击退方向}{力度}");
         if(!无敌状态)
         {
             Debug.Log("击退生效");
             刚体.velocity = 击退方向 * 力度;
             正在受击退 = true;
+        }
+    }
+    
+    public void 收到推拉(Vector2 方向, float 总距离)
+    {
+        刚体.velocity = Vector2.zero;
+
+        float 滑行段位移 = 最大速度 / 阻尼;
+        float 施力距离 = 总距离 - 滑行段位移;
+        
+        float 极限速度 = 固定推拉力 / (阻尼 * 质量);
+        float 加速时间 = (1 / 阻尼) * Mathf.Log(极限速度 / (极限速度 - 最大速度));
+        float 加速段位移 = 极限速度 * 加速时间 - (极限速度 / 阻尼) * (1 - Mathf.Exp(-阻尼 * 加速时间));
+
+        float 最小有效位移 = 加速段位移 + 0.001f;
+        float 施力时长;
+
+        if (总距离 <= 滑行段位移 || 施力距离 < 最小有效位移)
+        {
+            Debug.LogWarning($"推拉距离{总距离}太短，模型失效，使用最小施力时间");
+            施力时长 = 加速时间;
+        }
+        else
+        {
+            float 匀速段时间 = (施力距离 - 加速段位移) / 最大速度;
+            施力时长 = 加速时间 + 匀速段时间;
+        }
+        
+        float 判定阈值 = 0.1f;
+        float 滑行总时间 = (1f / 阻尼) * Mathf.Log(最大速度 / 判定阈值);
+        float 总锁定时间 = 施力时长 + 滑行总时间 / 2f;
+        
+        方向 = 方向.normalized;
+        StartCoroutine(收到推拉协程(方向, 施力时长, 总锁定时间));
+        推拉计数器++;
+
+    }
+    
+    private IEnumerator 收到推拉协程(Vector2 方向, float 施力时长, float 总锁定时间)
+    {
+        float 总计时器 = 0f;
+        float 施力计时器 = 0f;
+        while (总计时器 < 总锁定时间)
+        {
+            if (施力计时器 < 施力时长)
+            {
+                刚体.AddForce(方向 * 固定推拉力, ForceMode2D.Force);
+                施力计时器 += Time.fixedDeltaTime;
+            }
+            总计时器 += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+            限制推拉速度();
+        }
+
+        推拉计数器--;
+    }
+    
+    private void 限制推拉速度()
+    {
+        if (最大速度 <= 0f)
+        {
+            刚体.velocity = Vector2.zero;
+            return;
+        }
+
+        if (刚体.velocity.sqrMagnitude > 最大速度 * 最大速度)
+        {
+            刚体.velocity = 刚体.velocity.normalized * 最大速度;
         }
     }
 

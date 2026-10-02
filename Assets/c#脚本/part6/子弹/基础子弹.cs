@@ -76,7 +76,7 @@ public class 基础子弹 : MonoBehaviour, I池对象重置
             {   
                 Quaternion 旋转 = Quaternion.Euler(0,0,弹幕事件.旋转角度);
                 Vector2 子方向 = 旋转 * 母方向;
-                弹幕发射器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
+                行为调度器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
                 break;
             }
             
@@ -91,7 +91,7 @@ public class 基础子弹 : MonoBehaviour, I池对象重置
                     float 当前角度 = 起始角度 + i * 角度步长;
                     Quaternion 旋转 = Quaternion.Euler(0,0,当前角度);
                     Vector2 子方向 = 旋转 * 母方向;
-                    弹幕发射器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
+                    行为调度器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
                 }
                 break;
             }
@@ -106,7 +106,7 @@ public class 基础子弹 : MonoBehaviour, I池对象重置
                     float 当前角度 = i * 角度步长;
                     Quaternion 旋转 = Quaternion.Euler(0,0,当前角度);
                     Vector2 子方向 = 旋转 * 母方向;
-                    弹幕发射器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
+                    行为调度器.Instance.发射(发射原点, 子方向, 弹幕事件.子弹幕Pattern);
                 }
                 break;
             }
