@@ -8,7 +8,6 @@ public class 行为脚本 : MonoBehaviour
 
     private int 当前段索引;
     private float 当前段计时器;
-    private int 当前段运行轮数;
     private bool 正在等待;
     private bool 正在执行;
     private bool 全部完成;
@@ -85,7 +84,6 @@ public class 行为脚本 : MonoBehaviour
         {
             当前段索引++;
             当前段计时器 = 0f;
-            当前段运行轮数 = 0;
         }
         else
         {

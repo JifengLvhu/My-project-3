@@ -9,6 +9,7 @@ public class 通用激光Pattern : ScriptableObject, IPattern
     [Header("通用参数")] 
     public float 持续时间 = 3f;
     public float 预览时间 = 1f;
+    public float 渐变时间 = 0.15f;
     public float 旋转速度;
 
     [Header("激光显示")] 

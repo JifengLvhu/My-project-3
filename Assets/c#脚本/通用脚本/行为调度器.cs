@@ -7,10 +7,14 @@ public class 行为调度器 : MonoBehaviour
 {
     public static 行为调度器 Instance { get; private set; }
     
-    public readonly List<激光运行实例> 激光实例列表 = new List<激光运行实例>();
-    public readonly List<激光预览实例> 激光预览实例列表 = new List<激光预览实例>();
+    readonly List<激光运行实例> 激光实例列表 = new List<激光运行实例>();
+    readonly List<激光预览实例> 激光预览实例列表 = new List<激光预览实例>();
     
-    void Awake()
+    readonly List<推拉预览实例> 推拉预览实例列表 = new List<推拉预览实例>();
+    
+    readonly List<动静剑预览实例> 动静剑预览实例列表 = new List<动静剑预览实例>();
+    
+    private void Awake()
     {
         if (Instance != null)
         {
@@ -21,7 +25,7 @@ public class 行为调度器 : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Update()
+    private void Update()
     {
         for(int i = 激光实例列表.Count - 1; i >= 0; i--)
         {
@@ -42,8 +46,44 @@ public class 行为调度器 : MonoBehaviour
                 激光预览实例列表.RemoveAt(i);
             }
         }
+        
+        for (int i = 推拉预览实例列表.Count - 1; i >= 0; i--)
+        {
+            推拉预览实例 实例 = 推拉预览实例列表[i];
+            实例.更新(Time.fixedDeltaTime);
+            if (实例.已完成)
+            {
+                推拉预览实例列表.RemoveAt(i);
+            }
+        }
     }
     
+    private void FixedUpdate()
+    {
+        for (int i = 动静剑预览实例列表.Count - 1; i >= 0; i--)
+        {
+            动静剑预览实例 实例 = 动静剑预览实例列表[i];
+            实例.更新状态();
+            if (实例.已完成)
+            {
+                动静剑预览实例列表.RemoveAt(i);
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        for (int i = 动静剑预览实例列表.Count - 1; i >= 0; i--)
+        {
+            动静剑预览实例 实例 = 动静剑预览实例列表[i];
+            实例.更新位置();
+            if (实例.已完成)
+            {
+                动静剑预览实例列表.RemoveAt(i);
+            }
+        }
+    }
+
     public void 发射(Vector2 生成位置, Vector2 发射方向, IPattern pattern)
     {
         if(pattern == null) return;
@@ -79,11 +119,10 @@ public class 行为调度器 : MonoBehaviour
         yield return null;
     }
         
+    //单独激光发射，包含预览阶段
     private IEnumerator 发射激光全流程协程(Vector2 生成位置, Vector2 发射方向, 通用激光Pattern pattern)
     {
-        预览激光(生成位置, 发射方向, pattern);
-        yield return new WaitForSeconds(pattern.预览时间);
-        正式发射激光(生成位置, 发射方向, pattern);
+        yield return StartCoroutine(发射激光协程(生成位置, 发射方向, pattern, true));
     }
     
     public void 正式发射激光(Vector2 生成位置, Vector2 发射方向, 通用激光Pattern pattern)
@@ -93,10 +132,10 @@ public class 行为调度器 : MonoBehaviour
             return;
         }
 
-        StartCoroutine(发射激光协程(生成位置, 发射方向, pattern));
+        StartCoroutine(发射激光协程(生成位置, 发射方向, pattern, false));
     }
     
-    private IEnumerator 发射激光协程(Vector2 生成位置, Vector2 发射方向, 通用激光Pattern pattern)
+    private IEnumerator 发射激光协程(Vector2 生成位置, Vector2 发射方向, 通用激光Pattern pattern, bool 是否包含预览阶段)
     {
         yield return new WaitUntil(() => 对象池.Instance.已就绪);
         
@@ -104,7 +143,7 @@ public class 行为调度器 : MonoBehaviour
         yield return new WaitUntil(() => 请求.已完成);
         if(!请求.成功) yield break;
         
-        激光运行实例 实例 = new 激光运行实例(生成位置, 发射方向, pattern, 请求.对象);
+        激光运行实例 实例 = new 激光运行实例(生成位置, 发射方向, pattern, 请求.对象, 是否包含预览阶段);
         激光实例列表.Add(实例);
     }
     
@@ -142,23 +181,56 @@ public class 行为调度器 : MonoBehaviour
         }
     }
 
-    private IEnumerator 运行推拉玩家特效协程(Vector2 生成位置, 推拉玩家Pattern 推拉Pattern)
+    private IEnumerator 运行推拉玩家特效协程(Vector2 作用点, 推拉玩家Pattern 推拉Pattern)
     {
+        
+        yield return new WaitUntil(() => 对象池.Instance.已就绪);
+        
+        int 箭头数量 = Mathf.Max(推拉Pattern.预览箭头数量, 0);
+        
+        List<GameObject> 箭头列表 = new List<GameObject>();
+        
+        for(int i = 0; i < 箭头数量; i++)
+        {
+            float 角度 = i * 360f / Mathf.Max(1, 箭头数量);
+
+            Vector2 径向方向 = Quaternion.Euler(0f, 0f, 角度) * Vector2.right;
+
+            Vector2 初始位置 = 作用点 + 径向方向 * 推拉Pattern.预览箭头半径;
+            对象池获取请求 请求 = 对象池.Instance.异步获取对象(推拉Pattern.预览箭头名称, 推拉Pattern.预览箭头预制体, 初始位置, Quaternion.identity);
+            yield return new WaitUntil(() => 请求.已完成);
+            if(!请求.成功) yield break;
+            箭头列表.Add(请求.对象);
+        }
+        
+        推拉预览实例 预览实例 = new 推拉预览实例(作用点, 推拉Pattern, 箭头列表);
+        推拉预览实例列表.Add(预览实例);
+        
         yield return new WaitForSeconds(推拉Pattern.预览时间);
+        预览实例.结束();
+        
         Vector2 玩家位置 = 玩家.Instance.transform.position;  
         if(推拉Pattern.是否拉力)
         {
-            玩家.Instance.收到推拉(生成位置 - 玩家位置, 推拉Pattern.距离);
+            玩家.Instance.收到推拉(作用点 - 玩家位置, 推拉Pattern.距离);
         }
         else
         {       
-            玩家.Instance.收到推拉(玩家位置 - 生成位置, 推拉Pattern.距离);
+            玩家.Instance.收到推拉(玩家位置 - 作用点, 推拉Pattern.距离);
         }
     }
     
     private IEnumerator 运行动静剑特效协程(动静剑Pattern 动静Pattern)
     {
-        Debug.Log("运行动静剑特效协程开始");
+        yield return new WaitUntil(() => 对象池.Instance.已就绪);
+        
+        对象池获取请求 请求 = 对象池.Instance.异步获取对象(动静Pattern.动静剑预览名称, 动静Pattern.动静剑预览预制体, Vector2.zero, Quaternion.identity);
+        yield return new WaitUntil(() => 请求.已完成);
+        if(!请求.成功) yield break;
+        
+        动静剑预览实例 预览实例 = new 动静剑预览实例(动静Pattern, 请求.对象);
+        动静剑预览实例列表.Add(预览实例);
+        
         yield return new WaitForSeconds(动静Pattern.预览时间);
         float 计时器 = 0f;
         Rigidbody2D 玩家刚体 = 玩家.Instance.GetComponent<Rigidbody2D>();
@@ -184,6 +256,8 @@ public class 行为调度器 : MonoBehaviour
             计时器 += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
+        
+        预览实例.结束();
     }
     
 }

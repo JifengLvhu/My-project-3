@@ -13,6 +13,14 @@ public class 推拉玩家Pattern : ScriptableObject, IPattern
 
     [Header("时间")]
     public float 预览时间 = 1f;
+
+    [Header("预览参数")] 
+    public string 预览箭头名称 = "推拉预览箭头";
+    public GameObject 预览箭头预制体;
+    public int 预览箭头数量 = 5;
+    public float 预览箭头半径 = 2f;
+    public float 预览箭头移动距离 = 0.25f;
+    public float 预览箭头移动速度 = 3f;
     
     public IPattern.发射位置模式 发射位置模式 = IPattern.发射位置模式.相对boss坐标;
     public List<Vector2> 作用点列表 = new List<Vector2>();

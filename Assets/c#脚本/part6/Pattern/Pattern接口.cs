@@ -6,7 +6,7 @@ public interface IPattern
 {
     Pattern类型 类型 { get; }
 
-    public IEnumerable<IPattern.发射配置> 获取发射位置列表(Vector2 boss世界坐标);
+    public IEnumerable<发射配置> 获取发射位置列表(Vector2 boss世界坐标);
     
     public enum Pattern类型
     {

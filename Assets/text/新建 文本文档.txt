@@ -49,5 +49,6 @@ abcdefghijklmnopqrstuvwxyz
 返回主页
 打开
 同伴自爆
-
+保持移动
+保持静止
 
